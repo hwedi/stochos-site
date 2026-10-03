@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://stochos.dev/sitemap.xml

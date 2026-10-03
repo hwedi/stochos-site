@@ -244,3 +244,13 @@ p { margin: 0 0 1em; max-width: 62ch; }
   .trace.draw { animation: none; stroke-dashoffset: 0; }
   .chart-late { animation: none; opacity: 1; }
 }
+
+/* Test red circle on the landing page. Delete this block and the span.red-circle in index.html to remove it. */
+.red-circle {
+  display: block;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 20px;
+  border-radius: 50%;
+  background: #d62828;
+}

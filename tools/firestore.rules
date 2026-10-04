@@ -1,0 +1,62 @@
+rules_version = '2';
+
+// STOCHOS team database rules.
+// Paste into Firebase console > Firestore Database > Rules > Publish.
+// Replace OWNER_EMAIL_HERE with the maintainer's Google email (lowercase) before publishing.
+// Why it works this way:
+//  - members/{slug}: the public profile. Anyone can read it. Each person can change only their own
+//    linkedin and github. Only the maintainer can add people or change roles.
+//  - allowed/{email}: which Google account belongs to which profile. Private. Only the maintainer writes it.
+//  - meta/admin: has no data. It exists only so the sign-in page can ask "am I the maintainer?".
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+    function myEmail() {
+      return request.auth.token.email.lower();
+    }
+    function isAdmin() {
+      return signedIn() && myEmail() == 'OWNER_EMAIL_HERE';
+    }
+    function mySlug() {
+      return get(/databases/$(database)/documents/allowed/$(myEmail())).data.slug;
+    }
+    function shortText(v, max) {
+      return v is string && v.size() <= max;
+    }
+    function linkOk(v, pattern) {
+      return v is string && (v == '' || (v.size() <= 200 && v.matches(pattern)));
+    }
+    function memberOk(d) {
+      return d.keys().hasOnly(['name', 'role', 'linkedin', 'github'])
+        && d.keys().hasAll(['name', 'role', 'linkedin', 'github'])
+        && shortText(d.name, 80) && d.name.size() > 0
+        && shortText(d.role, 200)
+        && linkOk(d.linkedin, '^https://([a-z0-9-]+\\.)?linkedin\\.com/.+$')
+        && linkOk(d.github, '^https://(www\\.)?github\\.com/.+$');
+    }
+
+    match /members/{slug} {
+      allow read: if true;
+      allow create: if isAdmin() && memberOk(request.resource.data);
+      allow update: if memberOk(request.resource.data) && (
+        isAdmin() || (
+          signedIn() && mySlug() == slug
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['linkedin', 'github'])
+        )
+      );
+      allow delete: if isAdmin();
+    }
+
+    match /allowed/{email} {
+      allow read: if isAdmin() || (signedIn() && myEmail() == email);
+      allow write: if isAdmin();
+    }
+
+    match /meta/{docId} {
+      allow read: if docId == 'admin' && isAdmin();
+    }
+  }
+}

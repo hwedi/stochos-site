@@ -1,0 +1,14 @@
+{
+  "name": "stochos-site-tools",
+  "private": true,
+  "description": "Only used to rebuild js/account.js. The website itself has no build step.",
+  "scripts": {
+    "build": "NODE_PATH=./node_modules esbuild ../js/account.src.js --bundle --minify --format=iife --target=es2020 --legal-comments=none --outfile=../js/account.js"
+  },
+  "dependencies": {
+    "firebase": "12.19.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.10"
+  }
+}

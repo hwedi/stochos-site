@@ -125,8 +125,10 @@
 
   /* ---------- team ---------- */
   var teamList = document.getElementById("team-list");
-  if (teamList && D.team) {
-    D.team.forEach(function (m) {
+  function renderTeam(people) {
+    if (!teamList) return;
+    teamList.textContent = "";
+    people.forEach(function (m) {
       var li = htmlEl("li", "member", "", teamList);
       htmlEl("h3", "", m.name, li);
       htmlEl("p", "role", m.role, li);
@@ -143,7 +145,8 @@
 
       var links = htmlEl("div", "links", "", li);
       [["linkedin", "LinkedIn"], ["github", "GitHub"]].forEach(function (k) {
-        if (!m[k[0]]) return;
+        // only real web addresses become links
+        if (!m[k[0]] || !/^https:\/\//i.test(m[k[0]])) return;
         var a = htmlEl("a", "", k[1], links);
         a.href = m[k[0]];
         a.target = "_blank";
@@ -152,6 +155,8 @@
       });
     });
   }
+  if (D.team) renderTeam(D.team);
+  window.STOCHOS_renderTeam = renderTeam;
 
   /* ---------- results table ---------- */
   var record = document.getElementById("record");

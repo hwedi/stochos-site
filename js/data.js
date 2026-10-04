@@ -1,8 +1,10 @@
-/* The only file you need to edit to update the site's content.
+/* Content for the site.
 
-   TEAM: add "linkedin" and "github" (full web addresses) for each person.
-         Empty ones are hidden automatically. The roles below come from our
-         project plan, so each person should check theirs.
+   TEAM: once the team database is set up, the live site shows the team from the database
+         (names, roles, LinkedIn and GitHub links). Team members change their own links on
+         account.html, and the maintainer changes roles there. The team list below is the copy
+         the site falls back to if the database cannot be reached, and the starting content for
+         the database. Keep it in step with the database.
    PROJECTS: copy a block to add a new project. It appears on the Projects page.
    RESULTS: these numbers must match the models that are live on the demo. */
 

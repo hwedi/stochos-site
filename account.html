@@ -3,20 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Projects | STOCHOS</title>
-  <meta name="description" content="What STOCHOS has built: a web app that predicts faults and remaining life in power transformers from the gases in their oil.">
-  <link rel="canonical" href="https://stochos.dev/projects.html">
+  <title>Team sign-in | STOCHOS</title>
+  <meta name="description" content="Sign-in page for members of the STOCHOS team.">
+  <meta name="robots" content="noindex">
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <meta name="theme-color" content="#0c1b29">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="STOCHOS">
-  <meta property="og:title" content="Projects | STOCHOS">
-  <meta property="og:description" content="What STOCHOS has built: a web app that predicts faults and remaining life in power transformers.">
-  <meta property="og:url" content="https://stochos.dev/projects.html">
-  <meta property="og:image" content="https://stochos.dev/img/og.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta name="twitter:card" content="summary_large_image">
   <link rel="preload" href="fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/public-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
@@ -36,7 +27,7 @@
         <span>STOCHOS</span>
       </a>
       <nav class="site-nav" aria-label="Main">
-        <a href="projects.html" aria-current="page">Projects</a>
+        <a href="projects.html">Projects</a>
         <a href="index.html#team">Team</a>
         <a href="index.html#about">About</a>
       </nav>
@@ -47,24 +38,23 @@
   </header>
 
   <main id="main">
-    <section class="page-head">
-      <div class="wrap">
-        <h1>Projects</h1>
-        <p>What we have built so far, how it works, and where it falls short.</p>
-      </div>
-    </section>
-    <div class="wrap" id="project-list"></div>
-    <div class="wrap more"><p>More projects will appear here as we finish them.</p></div>
+    <div class="wrap account" id="view">
+      <h1>Team sign-in</h1>
+      <p class="lead">Loading...</p>
+      <noscript><p>This page needs JavaScript to sign in.</p></noscript>
+    </div>
   </main>
 
   <footer class="site-footer">
     <div class="wrap">
       <p>&copy; <span id="year">2026</span> STOCHOS. A student team. This is not an official Samsung website.</p>
-      <p><a href="projects.html">Projects</a><a href="account.html">Team sign-in</a></p>
+      <p><a href="projects.html">Projects</a></p>
     </div>
   </footer>
 
   <script src="js/data.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/account.js"></script>
   <script src="js/site.js"></script>
 </body>
 </html>

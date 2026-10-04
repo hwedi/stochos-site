@@ -4,8 +4,8 @@ rules_version = '2';
 // Paste into Firebase console > Firestore Database > Rules > Publish.
 // Replace OWNER_EMAIL_HERE with the maintainer's Google email (lowercase) before publishing.
 // Why it works this way:
-//  - members/{slug}: the public profile. Anyone can read it. Each person can change only their own
-//    linkedin and github. Only the maintainer can add people or change roles.
+//  - members/{slug}: the public profile. Anyone can read it. Each person can change anything on their
+//    own profile (name, role, linkedin, github). The maintainer can also edit any profile and add or remove people.
 //  - allowed/{email}: which Google account belongs to which profile. Private. Only the maintainer writes it.
 //  - meta/admin: has no data. It exists only so the sign-in page can ask "am I the maintainer?".
 service cloud.firestore {
@@ -42,10 +42,7 @@ service cloud.firestore {
       allow read: if true;
       allow create: if isAdmin() && memberOk(request.resource.data);
       allow update: if memberOk(request.resource.data) && (
-        isAdmin() || (
-          signedIn() && mySlug() == slug
-          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['linkedin', 'github'])
-        )
+        isAdmin() || (signedIn() && mySlug() == slug)
       );
       allow delete: if isAdmin();
     }

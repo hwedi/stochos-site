@@ -33,6 +33,8 @@
   --co: #c2410c;
   --c2h4: #0b7a5e;
   --c2h2: #7c3aed;
+  --c5: #b4195a;
+  --c6: #8a6200;
 
   --font-display: "Archivo", "Arial Narrow", Arial, sans-serif;
   --font-body: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -56,6 +58,8 @@
     --co: #ff9a62;
     --c2h4: #4fd1a5;
     --c2h2: #b794f6;
+    --c5: #ff8fb8;
+    --c6: #e8c15a;
     color-scheme: dark;
   }
 }
@@ -75,6 +79,8 @@
   --co: #ff9a62;
   --c2h4: #4fd1a5;
   --c2h2: #b794f6;
+  --c5: #ff8fb8;
+  --c6: #e8c15a;
   color-scheme: dark;
 }
 
@@ -184,21 +190,23 @@ p { margin: 0 0 1em; max-width: 62ch; }
 .principle h3 { margin-bottom: 0.7rem; }
 .principle p { color: var(--ink-2); margin: 0; }
 
-/* team: one row per person, equal weight */
-.team { list-style: none; padding: 0; margin: 0; }
+/* team: one card per person, equal weight, each with its own colour */
+.team { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
 .member {
-  display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.7fr) 170px minmax(5rem, auto);
-  gap: 1.5rem; align-items: center; padding: 1.2rem 0; border-top: 1px solid var(--line);
+  --who: var(--link);
+  display: flex; flex-direction: column; gap: 0.75rem; min-width: 0;
+  padding: 1.4rem 1.4rem 1.25rem; background: var(--paper-2);
+  border: 1px solid var(--line); border-top: 4px solid var(--who); border-radius: 4px;
 }
-.member:last-child { border-bottom: 1px solid var(--line); }
 .member h3 { font-size: 1.85rem; }
 .member .about-me { min-width: 0; }
 .member .role { color: var(--ink-2); margin: 0; }
-.member .bio { color: var(--ink); margin: 0.6rem 0 0; max-width: 60ch; }
-.member svg { width: 170px; height: 36px; display: block; }
-.member svg path { fill: none; stroke: var(--ink-3); stroke-width: 1.7; stroke-linejoin: round; stroke-linecap: round; }
-.member:hover svg path { stroke: var(--link); }
-.member .links { display: flex; gap: 1rem; justify-content: flex-end; }
+.member .bio { color: var(--ink); margin: 0.7rem 0 0; }
+.member svg { width: 100%; max-width: 240px; height: auto; display: block; margin-top: auto; }
+.member svg path { fill: none; stroke: var(--who); stroke-width: 1.9; stroke-linejoin: round; stroke-linecap: round; }
+.member .links { display: flex; gap: 1rem; }
+.member .links:empty { display: none; }
+.team-note { margin: 1.75rem 0 0; color: var(--ink-3); font-size: 0.9375rem; }
 
 .about p { color: var(--ink-2); font-size: 1.125rem; }
 
@@ -223,14 +231,11 @@ p { margin: 0 0 1em; max-width: 62ch; }
 @media (max-width: 960px) {
   .hero .wrap, .feature, .project { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
   .principles { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
-  .member { grid-template-columns: minmax(0, 1fr) 150px; row-gap: 0.4rem; }
-  .member .about-me { grid-column: 1 / -1; grid-row: 2; }
-  .member svg { width: 150px; }
-  .member .links { grid-column: 1 / -1; justify-content: flex-start; }
-  .member:not(:has(.links a)) .links { display: none; }
+  .team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .site-nav { gap: 1.1rem; }
 }
 @media (max-width: 640px) {
+  .team { grid-template-columns: minmax(0, 1fr); }
   /* the drawing shrinks on phones, so its text is set larger to stay readable */
   .chart-label { font-size: 22px; }
   .chart-note { font-size: 19px; }

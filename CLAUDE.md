@@ -40,7 +40,7 @@ Always start with `git fetch origin` and work from the latest origin/main. Ignor
 ## Rules for content
 
 - The team is six equals, listed alphabetically, with no leader.
-- The site is about the team, not the project and not Samsung. The landing page is: the opening about the six of us, the team list, and one short pointer to what we built. All project detail (results, chart, how we work) lives on projects.html. Keep it that way.
+- The site is about the team, not the project and not Samsung. The landing page is: the opening about the six of us with the coloured graph beside it (the owner likes that graph, so keep it), the team as six cards (each person has their own colour), and one short pointer to what we built. All other project detail (results, how we work) lives on projects.html. Keep it that way.
 - Samsung appears in one place only: the footer line "not an official Samsung website". Do not mention Samsung, the programme or where the team met anywhere else unless the owner asks.
 - Do not say on the pages that the team is listed alphabetically, or explain who is above whom. Keep the order alphabetical, and say nothing about it.
 - Never write words about a person for them (bio, role, anything). The bio line is written only by that person on account.html. Never invent facts about the team.

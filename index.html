@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>STOCHOS: machine learning that tells you how sure it is</title>
-  <meta name="description" content="STOCHOS is a team of six data science students from the Samsung Innovation Campus in Libya. Our first project predicts faults and remaining life in power transformers.">
+  <title>STOCHOS: six data science students building machine learning together</title>
+  <meta name="description" content="STOCHOS is a team of six data science students in Libya who work as equals. Meet the team, and see our first project: predicting faults and remaining life in power transformers.">
   <link rel="canonical" href="https://stochos.dev/">
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <meta name="theme-color" content="#0c1b29">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="STOCHOS">
-  <meta property="og:title" content="STOCHOS: machine learning that tells you how sure it is">
-  <meta property="og:description" content="Six data science students from the Samsung Innovation Campus, Libya. Our first project predicts faults and remaining life in power transformers.">
+  <meta property="og:title" content="STOCHOS: six data science students building machine learning together">
+  <meta property="og:description" content="Six data science students in Libya, working as equals. Our first project predicts faults and remaining life in power transformers.">
   <meta property="og:url" content="https://stochos.dev/">
   <meta property="og:image" content="https://stochos.dev/img/og.png">
   <meta property="og:image:width" content="1200">
@@ -36,8 +36,8 @@
         <span>STOCHOS</span>
       </a>
       <nav class="site-nav" aria-label="Main">
-        <a href="projects.html">Projects</a>
         <a href="index.html#team">Team</a>
+        <a href="projects.html">Projects</a>
         <a href="index.html#about">About</a>
       </nav>
       <button class="theme" id="theme" type="button" aria-label="Switch between light and dark theme" title="Switch theme">
@@ -50,41 +50,34 @@
     <section class="hero">
       <div class="wrap">
         <div>
-          <h1>Machine learning that tells you how sure it is.</h1>
-          <p class="lead">STOCHOS is six data science students from the Samsung Innovation Campus in Libya. Our first project reads the gases in a power transformer's oil and reports what is wrong with it and how long it has left.</p>
+          <h1>We are STOCHOS: six data science students.</h1>
+          <p class="lead">We work as equals. We split the work by stage and check each other's work. Each of us writes our own profile below.</p>
           <div class="actions">
-            <a class="btn btn-primary" data-demo-link href="https://transformer.stochos.dev" target="_blank" rel="noopener">Open the live demo<span class="sr-only"> (opens in a new tab)</span></a>
-            <a class="btn btn-quiet" href="projects.html">See our projects</a>
+            <a class="btn btn-primary" href="#team">Meet the team</a>
+            <a class="btn btn-quiet" href="projects.html">See what we have built</a>
           </div>
         </div>
         <figure class="hero-figure">
-          <div id="hero-chart"></div>
-          <figcaption>An illustration of what the project does: it reads four gases over time, then estimates how long the transformer has left.</figcaption>
+          <div id="team-art"></div>
+          <figcaption>Six lines, one for each of us. Each line is drawn from a person's name, so no two are alike and none sits above the others.</figcaption>
         </figure>
       </div>
     </section>
 
-    <section class="section" id="project">
-      <div class="wrap feature">
-        <div>
-          <h2>Transformer Health Check</h2>
-          <p>Power transformers sit at the heart of the grid. When one fails without warning, the power goes out and the repair is expensive.</p>
-          <p>We built two neural networks that read the gases dissolved in a transformer's oil. One names the fault. The other estimates the remaining life in days, with a range. A web app lets anyone try it, and every answer comes with how sure the models are.</p>
-          <div class="actions">
-            <a class="btn btn-primary" data-demo-link href="https://transformer.stochos.dev" target="_blank" rel="noopener">Open the live demo<span class="sr-only"> (opens in a new tab)</span></a>
-            <a class="btn btn-quiet" href="projects.html">Read how it works</a>
-          </div>
+    <section class="section" id="team" aria-labelledby="team-h">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="team-h">The team</h2>
+          <p>Six of us, in alphabetical order. Nobody is ahead of anybody else. Each person writes and updates their own profile.</p>
         </div>
-        <div>
-          <table class="record" id="record"></table>
-          <p class="record-note" id="record-note"></p>
-        </div>
+        <ul class="team" id="team-list"></ul>
+        <noscript><p>Ahmed Elsharif, Ekhlass Talha, Faraj Ali, Mohamed Hwedi, Muad Elsalieni and Suliman Hashem.</p></noscript>
       </div>
     </section>
 
     <section class="section" aria-labelledby="how">
       <div class="wrap">
-        <div class="section-head"><h2 id="how">How we work</h2></div>
+        <div class="section-head"><h2 id="how">How we work together</h2></div>
         <div class="principles">
           <div class="principle">
             <h3>We test on data the model has never seen</h3>
@@ -102,20 +95,31 @@
       </div>
     </section>
 
-    <section class="section" id="team" aria-labelledby="team-h">
-      <div class="wrap">
-        <div class="section-head">
-          <h2 id="team-h">The team</h2>
-          <p>Six students working as equals. We split the work by stage and checked each other's work.</p>
+    <section class="section" id="project">
+      <div class="wrap feature">
+        <div>
+          <h2>Our first project: Transformer Health Check</h2>
+          <p>Power transformers sit at the heart of the grid. When one fails without warning, the power goes out and the repair is expensive.</p>
+          <p>We built two neural networks that read the gases dissolved in a transformer's oil. One names the fault. The other estimates the remaining life in days, with a range. A web app lets anyone try it, and every answer comes with how sure the models are.</p>
+          <div class="actions">
+            <a class="btn btn-primary" data-demo-link href="https://transformer.stochos.dev" target="_blank" rel="noopener">Open the live demo<span class="sr-only"> (opens in a new tab)</span></a>
+            <a class="btn btn-quiet" href="projects.html">Read how it works</a>
+          </div>
         </div>
-        <ul class="team" id="team-list"></ul>
-        <noscript><p>Ahmed Elsharif, Ekhlass Talha, Faraj Ali, Mohamed Hwedi, Muad Elsalieni and Suliman Hashem.</p></noscript>
+        <div>
+          <figure class="hero-figure project-figure">
+            <div id="project-chart"></div>
+            <figcaption>An illustration of what the project does: it reads four gases over time, then estimates how long the transformer has left.</figcaption>
+          </figure>
+          <table class="record" id="record"></table>
+          <p class="record-note" id="record-note"></p>
+        </div>
       </div>
     </section>
 
     <section class="section about" id="about" aria-labelledby="about-h">
       <div class="wrap">
-        <div class="section-head"><h2 id="about-h">Where this comes from</h2></div>
+        <div class="section-head"><h2 id="about-h">How we met</h2></div>
         <p>We met in the Samsung Innovation Campus Data Science and AI programme in Libya (2026 cohort). The transformer project is our capstone, and this site is where we keep what we build.</p>
       </div>
     </section>

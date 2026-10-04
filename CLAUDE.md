@@ -33,13 +33,15 @@ Always start with `git fetch origin` and work from the latest origin/main. Ignor
 
 - js/data.js holds the content that changes: projects, the results numbers, and the team copy (see "Team sign-in" below for how the team works now).
 - Other files: index.html, projects.html, 404.html, account.html, css/site.css (colour variables are at the top), js/site.js, fonts/, img/.
-- img/og.png needs a browser to regenerate. Ask the owner when it needs a new one.
+- img/og.png (the picture shown when the site is shared) needs a browser to regenerate. Ask the owner when it needs a new one.
 - CNAME must stay exactly: stochos.dev
 - Update sitemap.xml when a page is added. Exception: account.html is private (noindex), so it stays out of the sitemap.
 
 ## Rules for content
 
 - The team is six equals, listed alphabetically, with no leader.
+- The site is about the team first. The landing page order is: the team (opening, then the team list), how we work together, the first project, how we met. Keep it that way. The project is one section of the site, not the theme of it. Do not make the opening about the project or about Samsung.
+- Never write words about a person for them (bio, role, anything). The bio line is written only by that person on account.html. Never invent facts about the team.
 - Add a LinkedIn or GitHub link only when the owner gives the exact address, or when the person types it themselves on the sign-in page. Never invent one.
 - Each person edits their own name, role and links on account.html. Do not change a role or a name yourself unless the owner asks.
 - The results numbers (95%, 45 of 900, 40 days, 89%) must match the transformer app. Change them only if the owner says the models changed.
@@ -60,7 +62,7 @@ The team signs in with Google on account.html and edits their own profile. This 
 
 - Firebase project: stochos-d0da4. The public settings are in js/firebase-config.js. They are meant to be public.
 - The database has three collections:
-  - `members/{slug}`: public profile (name, role, linkedin, github). The live site reads it. Each person can change everything on their own profile, with no approval. The owner can edit any profile.
+  - `members/{slug}`: public profile (name, role, bio, linkedin, github). The bio is optional and 300 letters at most. The live site reads it. Each person can change everything on their own profile, with no approval. The owner can edit any profile.
   - `allowed/{email}`: which Google email belongs to which profile. Private. Only the owner writes it, on account.html under "Team list".
   - `meta/admin`: holds no data. It lets the page ask "am I the owner?".
 - Rules are in tools/firestore.rules. They have a placeholder for the owner's email. The real rules are published in the Firebase console (Firestore Database, Rules, Publish). If the rules change, give the owner the full text with their email filled in and the exact clicks. You cannot publish them yourself.

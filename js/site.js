@@ -54,8 +54,8 @@
     });
   }
 
-  /* ---------- hero drawing: four gas traces, then the estimate with its range ---------- */
-  var hero = document.getElementById("hero-chart");
+  /* ---------- project drawing: four gas traces, then the estimate with its range ---------- */
+  var hero = document.getElementById("project-chart");
   if (hero) {
     var W = 760, H = 470, X0 = 36, X1 = 420, TOP = 70, BOT = 392;
     var svg = svgEl("svg", {
@@ -131,7 +131,9 @@
     people.forEach(function (m) {
       var li = htmlEl("li", "member", "", teamList);
       htmlEl("h3", "", m.name, li);
-      htmlEl("p", "role", m.role, li);
+      var about = htmlEl("div", "about-me", "", li);
+      htmlEl("p", "role", m.role, about);
+      if (m.bio) htmlEl("p", "bio", m.bio, about);
 
       // a small trace, unique to each name
       var s = svgEl("svg", { viewBox: "0 0 170 36", "aria-hidden": "true", focusable: "false" }, li);
@@ -155,8 +157,51 @@
       });
     });
   }
-  if (D.team) renderTeam(D.team);
-  window.STOCHOS_renderTeam = renderTeam;
+
+  /* ---------- top of the page: one line for each of us, all drawn the same way ---------- */
+  var artKey = "";
+  function drawTeamArt(people) {
+    var host = document.getElementById("team-art");
+    if (!host || !people.length) return;
+    var key = people.map(function (m) { return m.name; }).join("|");
+    if (key === artKey) return; // same names: keep the drawing, do not replay it
+    artKey = key;
+    host.textContent = "";
+
+    var W = 760, H = 470, X0 = 30, X1 = 470, TOP = 70, BOT = 400;
+    var svg = svgEl("svg", {
+      viewBox: "0 0 " + W + " " + H, role: "img",
+      "aria-label": "Illustration: one line for each member of the team, all drawn the same way, in alphabetical order."
+    }, host);
+    for (var gx = 0; gx <= W; gx += 20) {
+      svgEl("line", { x1: gx, y1: 0, x2: gx, y2: H, stroke: gx % 100 === 0 ? "var(--grid-major)" : "var(--grid)", "stroke-width": gx % 100 === 0 ? 1 : 0.6 }, svg);
+    }
+    for (var gy = 0; gy <= H; gy += 20) {
+      svgEl("line", { x1: 0, y1: gy, x2: W, y2: gy, stroke: gy % 100 === 0 ? "var(--grid-major)" : "var(--grid)", "stroke-width": gy % 100 === 0 ? 1 : 0.6 }, svg);
+    }
+
+    var n = people.length, step = n > 1 ? (BOT - TOP) / (n - 1) : 0;
+    people.forEach(function (m, i) {
+      var cy = n > 1 ? TOP + i * step : (TOP + BOT) / 2;
+      var r = rng(hash(m.name)), y = 0, pts = [], N = 90;
+      for (var j = 0; j < N; j++) {
+        y += (r() - 0.5) * 15;
+        y -= y * 0.12;
+        pts.push([X0 + (j / (N - 1)) * (X1 - X0), cy + Math.max(-24, Math.min(24, y))]);
+      }
+      var p = svgEl("path", { d: pathFrom(pts), class: "trace" + (reduceMotion ? "" : " draw"), pathLength: 1, stroke: "var(--ink)" }, svg);
+      if (!reduceMotion) p.style.animationDelay = (i * 0.12) + "s";
+      var lab = svgEl("text", { x: X1 + 16, y: cy + 5, class: "chart-label chart-late", fill: "var(--ink)" }, svg);
+      lab.textContent = m.name;
+    });
+  }
+
+  function showTeam(people) {
+    renderTeam(people);
+    drawTeamArt(people);
+  }
+  if (D.team) showTeam(D.team);
+  window.STOCHOS_renderTeam = showTeam;
 
   /* ---------- results table ---------- */
   var record = document.getElementById("record");

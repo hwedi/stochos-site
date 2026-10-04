@@ -15,7 +15,7 @@
     .then(function (j) {
       var list = (j.documents || []).map(function (d) {
         var f = d.fields || {};
-        return { name: text(f.name), role: text(f.role), linkedin: text(f.linkedin), github: text(f.github) };
+        return { name: text(f.name), role: text(f.role), bio: text(f.bio), linkedin: text(f.linkedin), github: text(f.github) };
       }).filter(function (m) { return m.name && m.role; });
       if (!list.length) return;
       list.sort(function (a, b) { return a.name.localeCompare(b.name); });

@@ -4,7 +4,8 @@
          (names, roles, LinkedIn and GitHub links). Team members change their own links on
          account.html, and the maintainer changes roles there. The team list below is the copy
          the site falls back to if the database cannot be reached, and the starting content for
-         the database. Keep it in step with the database.
+         the database. Keep it in step with the database. "bio" is what a person says about
+         themselves. It is written only by that person on account.html. Never write one for them.
    PROJECTS: copy a block to add a new project. It appears on the Projects page.
    RESULTS: these numbers must match the models that are live on the demo. */
 
@@ -13,12 +14,12 @@ window.STOCHOS = {
 
   // alphabetical, because nobody is ahead of anybody else
   team: [
-    { name: "Ahmed Elsharif",  role: "Data preparation, remaining-life model, interface", linkedin: "", github: "" },
-    { name: "Ekhlass Talha",   role: "Fault-diagnosis model, interface",                  linkedin: "", github: "" },
-    { name: "Faraj Ali",       role: "Data exploration, remaining-life model",            linkedin: "", github: "" },
-    { name: "Mohamed Hwedi",   role: "Data preparation, remaining-life model and testing, interface", linkedin: "", github: "" },
-    { name: "Muad Elsalieni",  role: "Data exploration, fault-diagnosis model",           linkedin: "", github: "" },
-    { name: "Suliman Hashem",  role: "Data preparation, fault-diagnosis model",           linkedin: "", github: "" }
+    { name: "Ahmed Elsharif",  role: "Data preparation, remaining-life model, interface", bio: "", linkedin: "", github: "" },
+    { name: "Ekhlass Talha",   role: "Fault-diagnosis model, interface", bio: "",                  linkedin: "", github: "" },
+    { name: "Faraj Ali",       role: "Data exploration, remaining-life model", bio: "",            linkedin: "", github: "" },
+    { name: "Mohamed Hwedi",   role: "Data preparation, remaining-life model and testing, interface", bio: "", linkedin: "", github: "" },
+    { name: "Muad Elsalieni",  role: "Data exploration, fault-diagnosis model", bio: "",           linkedin: "", github: "" },
+    { name: "Suliman Hashem",  role: "Data preparation, fault-diagnosis model", bio: "",           linkedin: "", github: "" }
   ],
 
   results: {

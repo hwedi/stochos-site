@@ -87,7 +87,7 @@ function checkLink(value, kind) {
 function signedOut() {
   clear();
   el("h1", "", "Team sign-in", view);
-  el("p", "lead", "Members of the team can sign in with Google to update their own profile: name, role, LinkedIn and GitHub.", view);
+  el("p", "lead", "Members of the team can sign in with Google to update their own profile: name, role, a few words about themselves, LinkedIn and GitHub.", view);
   var box = messageBox(view);
   var actions = el("div", "actions", "", view);
   button(actions, "Sign in with Google", "btn-primary", function () {
@@ -114,6 +114,10 @@ function selfForm(slug, member) {
   var ro = field(form, "f-role", "What you worked on", member.role, {
     hint: "A short line, for example: Data preparation, fault-diagnosis model."
   });
+  var bi = field(form, "f-bio", "About you", member.bio, {
+    multiline: true, rows: 4,
+    hint: "A sentence or two, in your own words. 300 letters at most. Leave empty to show nothing."
+  });
   var li = field(form, "f-linkedin", "LinkedIn address", member.linkedin, {
     type: "url", placeholder: "https://www.linkedin.com/in/your-name",
     hint: "Leave empty to show no LinkedIn link."
@@ -128,14 +132,15 @@ function selfForm(slug, member) {
   save.type = "submit";
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    var n = nm.value.trim(), r = ro.value.trim(), l = li.value.trim(), g = gh.value.trim();
+    var n = nm.value.trim(), r = ro.value.trim(), b = bi.value.trim(), l = li.value.trim(), g = gh.value.trim();
     var bad = !n ? "Your name cannot be empty."
       : n.length > 80 ? "Your name is too long."
       : r.length > 200 ? "The line about your work is too long (200 letters at most)."
+      : b.length > 300 ? "Your text is too long (300 letters at most)."
       : checkLink(l, "linkedin") || checkLink(g, "github");
     if (bad) { say(box, bad, true); return; }
     save.disabled = true;
-    updateDoc(doc(db, "members", slug), { name: n, role: r, linkedin: l, github: g })
+    updateDoc(doc(db, "members", slug), { name: n, role: r, bio: b, linkedin: l, github: g })
       .then(function () { say(box, "Saved. The change shows on the site within a minute. Press Ctrl+F5 on the site to see it."); })
       .catch(function (err) { say(box, friendly(err), true); })
       .then(function () { save.disabled = false; });
@@ -185,7 +190,7 @@ function adminPanel(refresh) {
         // start from the copy in data.js when the name matches
         var seed = (D.team || []).filter(function (t) { return slugify(t.name) === p.slug; })[0] || {};
         batch.set(doc(db, "members", p.slug), {
-          name: p.name, role: seed.role || "", linkedin: seed.linkedin || "", github: seed.github || ""
+          name: p.name, role: seed.role || "", bio: "", linkedin: seed.linkedin || "", github: seed.github || ""
         });
         added++;
       });

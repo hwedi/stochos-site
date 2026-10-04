@@ -171,7 +171,7 @@
     var W = 760, H = 470, X0 = 30, X1 = 470, TOP = 70, BOT = 400;
     var svg = svgEl("svg", {
       viewBox: "0 0 " + W + " " + H, role: "img",
-      "aria-label": "Illustration: one line for each member of the team, all drawn the same way, in alphabetical order."
+      "aria-label": "Illustration: one line for each member of the team, all drawn the same way."
     }, host);
     for (var gx = 0; gx <= W; gx += 20) {
       svgEl("line", { x1: gx, y1: 0, x2: gx, y2: H, stroke: gx % 100 === 0 ? "var(--grid-major)" : "var(--grid)", "stroke-width": gx % 100 === 0 ? 1 : 0.6 }, svg);

@@ -38,7 +38,6 @@
       <nav class="site-nav" aria-label="Main">
         <a href="index.html#team">Team</a>
         <a href="projects.html" aria-current="page">Projects</a>
-        <a href="index.html#about">About</a>
       </nav>
       <button class="theme" id="theme" type="button" aria-label="Switch between light and dark theme" title="Switch theme">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5 a8.5 8.5 0 0 1 0 17 z" fill="currentColor"/></svg>
@@ -54,6 +53,42 @@
       </div>
     </section>
     <div class="wrap" id="project-list"></div>
+    <section class="section" id="results" aria-labelledby="results-h">
+      <div class="wrap">
+        <div class="section-head"><h2 id="results-h">Results</h2></div>
+        <div class="feature">
+          <figure class="hero-figure project-figure">
+            <div id="project-chart"></div>
+            <figcaption>An illustration of what the project does: it reads four gases over time, then estimates how long the transformer has left.</figcaption>
+          </figure>
+          <div>
+            <table class="record" id="record"></table>
+            <p class="record-note" id="record-note"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="how">
+      <div class="wrap">
+        <div class="section-head"><h2 id="how">How we work</h2></div>
+        <div class="principles">
+          <div class="principle">
+            <h3>We test on data the model has never seen</h3>
+            <p>We hold back 900 of our 3,000 transformers until the very end and check them once. That is the only honest way to know if a model works.</p>
+          </div>
+          <div class="principle">
+            <h3>We say when we are unsure</h3>
+            <p>Every prediction comes with a confidence score or a range. When confidence is low, the answer goes to a person to review.</p>
+          </div>
+          <div class="principle">
+            <h3>We can explain every line</h3>
+            <p>Each of us can walk through the code and defend the choice behind it. If we cannot explain it, we do not use it.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <div class="wrap more"><p>More projects will appear here as we finish them.</p></div>
   </main>
 

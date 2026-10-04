@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>STOCHOS: six data science students building machine learning together</title>
-  <meta name="description" content="STOCHOS is a team of six data science students in Libya who work as equals. Meet the team, and see our first project: predicting faults and remaining life in power transformers.">
+  <title>STOCHOS: six data science students</title>
+  <meta name="description" content="STOCHOS is a team of six data science students in Libya who work as equals. Meet the team and see what we have built.">
   <link rel="canonical" href="https://stochos.dev/">
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <meta name="theme-color" content="#0c1b29">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="STOCHOS">
-  <meta property="og:title" content="STOCHOS: six data science students building machine learning together">
-  <meta property="og:description" content="Six data science students in Libya, working as equals. Our first project predicts faults and remaining life in power transformers.">
+  <meta property="og:title" content="STOCHOS: six data science students">
+  <meta property="og:description" content="Six data science students in Libya, working as equals. Meet the team.">
   <meta property="og:url" content="https://stochos.dev/">
   <meta property="og:image" content="https://stochos.dev/img/og.png">
   <meta property="og:image:width" content="1200">
@@ -38,7 +38,6 @@
       <nav class="site-nav" aria-label="Main">
         <a href="index.html#team">Team</a>
         <a href="projects.html">Projects</a>
-        <a href="index.html#about">About</a>
       </nav>
       <button class="theme" id="theme" type="button" aria-label="Switch between light and dark theme" title="Switch theme">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5 a8.5 8.5 0 0 1 0 17 z" fill="currentColor"/></svg>
@@ -54,12 +53,11 @@
           <p class="lead">We work as equals. We split the work by stage and check each other's work. Each of us writes our own profile below.</p>
           <div class="actions">
             <a class="btn btn-primary" href="#team">Meet the team</a>
-            <a class="btn btn-quiet" href="projects.html">See what we have built</a>
           </div>
         </div>
         <figure class="hero-figure">
           <div id="team-art"></div>
-          <figcaption>Six lines, one for each of us. Each line is drawn from a person's name, so no two are alike and none sits above the others.</figcaption>
+          <figcaption>Six lines, one for each of us. Each line is drawn from a person's name, so no two are alike.</figcaption>
         </figure>
       </div>
     </section>
@@ -68,59 +66,23 @@
       <div class="wrap">
         <div class="section-head">
           <h2 id="team-h">The team</h2>
-          <p>Six of us, in alphabetical order. Nobody is ahead of anybody else. Each person writes and updates their own profile.</p>
+          <p>Each person writes and updates their own profile.</p>
         </div>
         <ul class="team" id="team-list"></ul>
         <noscript><p>Ahmed Elsharif, Ekhlass Talha, Faraj Ali, Mohamed Hwedi, Muad Elsalieni and Suliman Hashem.</p></noscript>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="how">
+    <section class="section" id="work" aria-labelledby="work-h">
       <div class="wrap">
-        <div class="section-head"><h2 id="how">How we work together</h2></div>
-        <div class="principles">
-          <div class="principle">
-            <h3>We test on data the model has never seen</h3>
-            <p>We hold back 900 of our 3,000 transformers until the very end and check them once. That is the only honest way to know if a model works.</p>
-          </div>
-          <div class="principle">
-            <h3>We say when we are unsure</h3>
-            <p>Every prediction comes with a confidence score or a range. When confidence is low, the answer goes to a person to review.</p>
-          </div>
-          <div class="principle">
-            <h3>We can explain every line</h3>
-            <p>Each of us can walk through the code and defend the choice behind it. If we cannot explain it, we do not use it.</p>
-          </div>
+        <div class="section-head">
+          <h2 id="work-h">What we have built</h2>
+          <p>Our first project reads the gases in a power transformer's oil and reports what is wrong with it and how long it has left.</p>
         </div>
-      </div>
-    </section>
-
-    <section class="section" id="project">
-      <div class="wrap feature">
-        <div>
-          <h2>Our first project: Transformer Health Check</h2>
-          <p>Power transformers sit at the heart of the grid. When one fails without warning, the power goes out and the repair is expensive.</p>
-          <p>We built two neural networks that read the gases dissolved in a transformer's oil. One names the fault. The other estimates the remaining life in days, with a range. A web app lets anyone try it, and every answer comes with how sure the models are.</p>
-          <div class="actions">
-            <a class="btn btn-primary" data-demo-link href="https://transformer.stochos.dev" target="_blank" rel="noopener">Open the live demo<span class="sr-only"> (opens in a new tab)</span></a>
-            <a class="btn btn-quiet" href="projects.html">Read how it works</a>
-          </div>
+        <div class="actions">
+          <a class="btn btn-primary" data-demo-link href="https://transformer.stochos.dev" target="_blank" rel="noopener">Open the live demo<span class="sr-only"> (opens in a new tab)</span></a>
+          <a class="btn btn-quiet" href="projects.html">Read how it works</a>
         </div>
-        <div>
-          <figure class="hero-figure project-figure">
-            <div id="project-chart"></div>
-            <figcaption>An illustration of what the project does: it reads four gases over time, then estimates how long the transformer has left.</figcaption>
-          </figure>
-          <table class="record" id="record"></table>
-          <p class="record-note" id="record-note"></p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section about" id="about" aria-labelledby="about-h">
-      <div class="wrap">
-        <div class="section-head"><h2 id="about-h">How we met</h2></div>
-        <p>We met in the Samsung Innovation Campus Data Science and AI programme in Libya (2026 cohort). The transformer project is our capstone, and this site is where we keep what we build.</p>
       </div>
     </section>
   </main>

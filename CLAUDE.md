@@ -42,6 +42,7 @@ Always start with `git fetch origin` and work from the latest origin/main. Ignor
 - The team is six equals, listed alphabetically, with no leader.
 - The site is about the team, not the project and not Samsung. The landing page is: the opening about the six of us with the coloured graph beside it (the owner likes that graph, so keep it), the team as six cards (each person has their own colour), and one short pointer to what we built. All other project detail (results, how we work) lives on projects.html. Keep it that way.
 - Samsung appears in one place only: the footer line "not an official Samsung website". Do not mention Samsung, the programme or where the team met anywhere else unless the owner asks.
+- Never put text on the public pages that explains how the site itself works (for example "each person writes their own profile", "listed alphabetically", "sign in to edit"). Pages present the team and the work. The only sign-in link is in the footer. Section headings stand alone unless the owner gives the words.
 - Do not say on the pages that the team is listed alphabetically, or explain who is above whom. Keep the order alphabetical, and say nothing about it.
 - Never write words about a person for them (bio, role, anything). The bio line is written only by that person on account.html. Never invent facts about the team.
 - Add a LinkedIn or GitHub link only when the owner gives the exact address, or when the person types it themselves on the sign-in page. Never invent one.

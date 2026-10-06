@@ -4,7 +4,7 @@
    Rebuild and commit js/account.js after every change here. */
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, doc, getDoc, getDocs, collection, updateDoc, writeBatch } from "firebase/firestore";
+import { getFirestore, doc, getDoc, getDocs, collection, setDoc, updateDoc, writeBatch } from "firebase/firestore";
 
 var app = initializeApp(window.STOCHOS_FIREBASE);
 var auth = getAuth(app);
@@ -83,11 +83,91 @@ function checkLink(value, kind) {
   return "";
 }
 
+function checkWebsite(value) {
+  if (!value) return "";
+  if (value.length > 200) return "That website address is too long.";
+  if (!/^https:\/\/[A-Za-z0-9.-]+\.[A-Za-z]{2,}(\/[^\s]*)?$/.test(value)) {
+    return "Paste the full address of your website. It starts with https://";
+  }
+  return "";
+}
+
+/* A photo is cut to a square from the middle, made 320 pixels wide and saved as a small JPEG
+   inside the profile itself. Nothing is uploaded anywhere else. */
+function toPhoto(file) {
+  return new Promise(function (resolve, reject) {
+    if (!file || !/^image\//.test(file.type)) { reject(new Error("That file is not a picture.")); return; }
+    var url = URL.createObjectURL(file);
+    var img = new Image();
+    img.onload = function () {
+      var w = img.naturalWidth, h = img.naturalHeight, side = Math.min(w, h), S = 320;
+      var c = document.createElement("canvas");
+      c.width = c.height = S;
+      var ctx = c.getContext("2d");
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, S, S);
+      ctx.drawImage(img, (w - side) / 2, (h - side) / 2, side, side, 0, 0, S, S);
+      URL.revokeObjectURL(url);
+      var q = 0.86, out = c.toDataURL("image/jpeg", q);
+      while (out.length > 140000 && q > 0.4) { q -= 0.1; out = c.toDataURL("image/jpeg", q); }
+      if (out.length > 190000 || out.indexOf("data:image/jpeg;base64,") !== 0) { reject(new Error("That picture could not be made small enough.")); return; }
+      resolve(out);
+    };
+    img.onerror = function () { URL.revokeObjectURL(url); reject(new Error("That picture could not be opened.")); };
+    img.src = url;
+  });
+}
+
+function photoField(form, current, name) {
+  var state = { value: current || "" };
+  var wrap = el("div", "field photo-field", "", form);
+  var l = el("label", "", "Photo", wrap);
+  l.setAttribute("for", "f-photo");
+  var row = el("div", "photo-row", "", wrap);
+  var preview = el("div", "photo-preview", "", row);
+  var controls = el("div", "photo-controls", "", row);
+  var input = el("input", "", "", controls);
+  input.type = "file";
+  input.id = "f-photo";
+  input.accept = "image/*";
+  var rm = button(controls, "Remove photo", "btn-quiet", function () {
+    state.value = "";
+    input.value = "";
+    show();
+  });
+  var hint = el("p", "hint", "Optional. A square is cut from the middle of the picture. Without a photo, the site shows your coloured line.", wrap);
+  hint.id = "f-photo-hint";
+  input.setAttribute("aria-describedby", hint.id);
+  var box = messageBox(wrap);
+  function show() {
+    preview.textContent = "";
+    if (state.value) {
+      var img = el("img", "", "", preview);
+      img.src = state.value;
+      img.alt = "Your photo";
+      rm.hidden = false;
+    } else {
+      el("span", "", "No photo", preview);
+      rm.hidden = true;
+    }
+  }
+  input.addEventListener("change", function () {
+    var f = input.files && input.files[0];
+    if (!f) return;
+    box.textContent = "";
+    box.className = "message";
+    toPhoto(f).then(function (v) { state.value = v; show(); })
+      .catch(function (err) { say(box, err.message, true); input.value = ""; });
+  });
+  show();
+  return state;
+}
+
 /* ---------- screens ---------- */
 function signedOut() {
   clear();
   el("h1", "", "Team sign-in", view);
-  el("p", "lead", "Members of the team can sign in with Google to update their own profile: name, role, a few words about themselves, LinkedIn and GitHub.", view);
+  el("p", "lead", "Members of the team sign in with Google to create and edit their own profile.", view);
   var box = messageBox(view);
   var actions = el("div", "actions", "", view);
   button(actions, "Sign in with Google", "btn-primary", function () {
@@ -97,26 +177,42 @@ function signedOut() {
   });
 }
 
-function header(user) {
+function header(user, slug, hasProfile) {
   el("h1", "", "Your profile", view);
   var p = el("p", "lead", "Signed in as " + user.email + ". ", view);
+  if (slug && hasProfile) {
+    var v = el("a", "", "View your profile", p);
+    v.href = "profile.html?u=" + encodeURIComponent(slug);
+    p.appendChild(document.createTextNode(" \u00b7 "));
+  }
   var out = el("button", "linkbtn", "Sign out", p);
   out.type = "button";
   out.addEventListener("click", function () { signOut(auth); });
 }
 
-function selfForm(slug, member) {
+function profileForm(slug, member, isNew, done) {
   var sec = el("section", "panel", "", view);
-  el("h2", "", "Edit your profile", sec);
-  el("p", "hint", "This is what the team page shows about you. Changes go live within a minute.", sec);
+  el("h2", "", isNew ? "Create your profile" : "Edit your profile", sec);
+  el("p", "hint", isNew
+    ? "This is your own page on the site. Fill in what you like. You can change it at any time."
+    : "Changes show on the site as soon as you save.", sec);
   var form = el("form", "form", "", sec);
+  var ph = photoField(form, member.photo, member.name);
   var nm = field(form, "f-name", "Name", member.name);
-  var ro = field(form, "f-role", "What you worked on", member.role, {
-    hint: "A short line, for example: Data preparation, fault-diagnosis model."
+  var ro = field(form, "f-role", "Role", member.role, {
+    hint: "One short line under your name."
   });
-  var bi = field(form, "f-bio", "About you", member.bio, {
-    multiline: true, rows: 4,
-    hint: "A sentence or two, in your own words. 300 letters at most. Leave empty to show nothing."
+  var bi = field(form, "f-bio", "Short introduction", member.bio, {
+    multiline: true, rows: 3,
+    hint: "Shows on the team page and at the top of your profile. 300 letters at most."
+  });
+  var ab = field(form, "f-about", "About", member.about, {
+    multiline: true, rows: 9,
+    hint: "The longer text on your profile page. Leave an empty line between paragraphs. 3000 letters at most."
+  });
+  var sk = field(form, "f-skills", "Skills", member.skills, {
+    placeholder: "Python, SQL, PyTorch",
+    hint: "Separate them with commas. 300 letters at most."
   });
   var li = field(form, "f-linkedin", "LinkedIn address", member.linkedin, {
     type: "url", placeholder: "https://www.linkedin.com/in/your-name",
@@ -126,22 +222,37 @@ function selfForm(slug, member) {
     type: "url", placeholder: "https://github.com/your-name",
     hint: "Leave empty to show no GitHub link."
   });
+  var ws = field(form, "f-website", "Website", member.website, {
+    type: "url", placeholder: "https://your-site.com",
+    hint: "Optional. Your own site or portfolio."
+  });
   var box = messageBox(form);
   var actions = el("div", "actions", "", form);
-  var save = button(actions, "Save", "btn-primary", function () {});
+  var save = button(actions, isNew ? "Create profile" : "Save", "btn-primary", function () {});
   save.type = "submit";
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    var n = nm.value.trim(), r = ro.value.trim(), b = bi.value.trim(), l = li.value.trim(), g = gh.value.trim();
-    var bad = !n ? "Your name cannot be empty."
-      : n.length > 80 ? "Your name is too long."
-      : r.length > 200 ? "The line about your work is too long (200 letters at most)."
-      : b.length > 300 ? "Your text is too long (300 letters at most)."
-      : checkLink(l, "linkedin") || checkLink(g, "github");
+    var d = {
+      name: nm.value.trim(), role: ro.value.trim(), bio: bi.value.trim(), about: ab.value.trim(),
+      skills: sk.value.trim(), linkedin: li.value.trim(), github: gh.value.trim(), website: ws.value.trim(),
+      photo: ph.value
+    };
+    var bad = !d.name ? "Your name cannot be empty."
+      : d.name.length > 80 ? "Your name is too long (80 letters at most)."
+      : d.role.length > 200 ? "Your role is too long (200 letters at most)."
+      : d.bio.length > 300 ? "Your short introduction is too long (300 letters at most)."
+      : d.about.length > 3000 ? "Your About text is too long (3000 letters at most)."
+      : d.skills.length > 300 ? "Your skills list is too long (300 letters at most)."
+      : checkLink(d.linkedin, "linkedin") || checkLink(d.github, "github") || checkWebsite(d.website);
     if (bad) { say(box, bad, true); return; }
     save.disabled = true;
-    updateDoc(doc(db, "members", slug), { name: n, role: r, bio: b, linkedin: l, github: g })
-      .then(function () { say(box, "Saved. The change shows on the site within a minute. Press Ctrl+F5 on the site to see it."); })
+    setDoc(doc(db, "members", slug), d)
+      .then(function () {
+        say(box, isNew ? "Your profile is created." : "Saved. Your profile is updated.");
+        var v = el("a", "", " View your profile", box);
+        v.href = "profile.html?u=" + encodeURIComponent(slug);
+        if (isNew && done) done();
+      })
       .catch(function (err) { say(box, friendly(err), true); })
       .then(function () { save.disabled = false; });
   });
@@ -153,7 +264,7 @@ function adminPanel(refresh) {
 
   /* 1. who is on the team */
   el("h3", "", "Team list", sec);
-  el("p", "hint", "One person per line: full name, then the Google email they sign in with. Saving adds people and lets them sign in. It never changes anyone's role or links.", sec);
+  el("p", "hint", "One person per line: full name, then the Google email they sign in with. Saving lets them sign in. Someone new creates their own profile the first time they sign in. Saving never changes an existing profile.", sec);
   var form = el("form", "form", "", sec);
   var area = field(form, "f-list", "People", "", {
     multiline: true, rows: 7, placeholder: "Full Name, name@gmail.com"
@@ -187,15 +298,17 @@ function adminPanel(refresh) {
       people.forEach(function (p) {
         batch.set(doc(db, "allowed", p.email), { slug: p.slug });
         if (have[p.slug]) return;
-        // start from the copy in data.js when the name matches
-        var seed = (D.team || []).filter(function (t) { return slugify(t.name) === p.slug; })[0] || {};
+        // only start a profile when the site already has a copy of this person in data.js;
+        // anyone else creates their own profile when they first sign in
+        var seed = (D.team || []).filter(function (t) { return slugify(t.name) === p.slug; })[0];
+        if (!seed) return;
         batch.set(doc(db, "members", p.slug), {
           name: p.name, role: seed.role || "", bio: "", linkedin: seed.linkedin || "", github: seed.github || ""
         });
         added++;
       });
       return batch.commit().then(function () {
-        say(box, "Saved " + people.length + " people (" + added + " new profiles).");
+        say(box, "Saved " + people.length + " people. " + added + " profiles started from the site's copy; anyone else creates their own when they sign in.");
         area.value = "";
         return refresh();
       });
@@ -212,7 +325,7 @@ function adminPanel(refresh) {
     var rows = [];
     snap.forEach(function (d) { rows.push({ id: d.id, data: d.data() }); });
     rows.sort(function (a, b) { return a.data.name.localeCompare(b.data.name); });
-    if (!rows.length) { el("p", "hint", "No profiles yet. Save the team list above first.", list); return; }
+    if (!rows.length) { el("p", "hint", "No profiles yet.", list); return; }
     rows.forEach(function (r) {
       var f = el("form", "form role-row", "", list);
       var input = field(f, "role-" + r.id, r.data.name, r.data.role, { hint: "" });
@@ -249,10 +362,14 @@ function load(user) {
     var memberP = slug ? getDoc(doc(db, "members", slug)).then(function (s) { return s.exists() ? s.data() : null; }) : Promise.resolve(null);
     return memberP.then(function (member) {
       clear();
-      header(user);
-      if (slug && member) selfForm(slug, member);
+      header(user, slug, !!member);
+      if (slug && member) profileForm(slug, member, false);
+      if (slug && !member) {
+        var seed = (D.team || []).filter(function (t) { return slugify(t.name) === slug; })[0] || {};
+        profileForm(slug, { name: seed.name || user.displayName || "", role: seed.role || "" }, true, function () { load(user); });
+      }
       if (isAdmin) adminPanel(function () { return load(user); });
-      if (!(slug && member) && !isAdmin) {
+      if (!slug && !isAdmin) {
         var sec = el("section", "panel", "", view);
         el("h2", "", "This account is not on the team list", sec);
         el("p", "", "Sign out and sign in with the Google account that the maintainer added. If you think this is a mistake, tell the maintainer which email you used.", sec);

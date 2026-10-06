@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profile | STOCHOS</title>
+  <meta name="description" content="A member of STOCHOS, a team of six data science students.">
+  <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="STOCHOS">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#0c1b29">
+  <link rel="preload" href="fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/public-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap bar">
+      <a class="brand" href="index.html" aria-label="STOCHOS, home">
+        <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <path d="M3 22 L9 15 L13 19 L19 10 L25 13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M25 5 V20" stroke="var(--link)" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="25" cy="13" r="2.8" fill="var(--link)"/>
+        </svg>
+        <span>STOCHOS</span>
+      </a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html#team">Team</a>
+        <a href="projects.html">Projects</a>
+      </nav>
+      <button class="theme" id="theme" type="button" aria-label="Switch between light and dark theme" title="Switch theme">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5 a8.5 8.5 0 0 1 0 17 z" fill="currentColor"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <div id="profile">
+      <section class="page-head">
+        <div class="wrap">
+          <p class="lead">Loading...</p>
+          <noscript><p>This page needs JavaScript. <a href="index.html#team">See the team</a>.</p></noscript>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>&copy; <span id="year">2026</span> STOCHOS. A student team. This is not an official Samsung website.</p>
+      <p><a href="projects.html">Projects</a><a href="account.html">Team sign-in</a></p>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/live.js"></script>
+</body>
+</html>

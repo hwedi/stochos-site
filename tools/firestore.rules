@@ -4,8 +4,8 @@ rules_version = '2';
 // Paste into Firebase console > Firestore Database > Rules > Publish.
 // Replace OWNER_EMAIL_HERE with the maintainer's Google email (lowercase) before publishing.
 // Why it works this way:
-//  - members/{slug}: the public profile. Anyone can read it. Each person can change anything on their
-//    own profile (name, role, bio, linkedin, github). The maintainer can also edit any profile and add or remove people.
+//  - members/{slug}: the public profile. Anyone can read it. Each person creates and changes their own
+//    profile (name, role, bio, about, skills, links, photo). The maintainer can also edit any profile and add or remove people.
 //  - allowed/{email}: which Google account belongs to which profile. Private. Only the maintainer writes it.
 //  - meta/admin: has no data. It exists only so the sign-in page can ask "am I the maintainer?".
 service cloud.firestore {
@@ -29,19 +29,34 @@ service cloud.firestore {
     function linkOk(v, pattern) {
       return v is string && (v == '' || (v.size() <= 200 && v.matches(pattern)));
     }
+    function optText(d, k, max) {
+      return !(k in d) || shortText(d[k], max);
+    }
+    function photoOk(d) {
+      return !('photo' in d) || d.photo == '' || (
+        d.photo is string && d.photo.size() <= 200000
+        && d.photo.matches('^data:image/jpeg;base64,[A-Za-z0-9+/]+=*$')
+      );
+    }
     function memberOk(d) {
-      return d.keys().hasOnly(['name', 'role', 'linkedin', 'github', 'bio'])
+      return d.keys().hasOnly(['name', 'role', 'bio', 'about', 'skills', 'linkedin', 'github', 'website', 'photo'])
         && d.keys().hasAll(['name', 'role', 'linkedin', 'github'])
         && shortText(d.name, 80) && d.name.size() > 0
         && shortText(d.role, 200)
-        && (!('bio' in d) || shortText(d.bio, 300))
+        && optText(d, 'bio', 300)
+        && optText(d, 'about', 3000)
+        && optText(d, 'skills', 300)
         && linkOk(d.linkedin, '^https://([a-z0-9-]+\\.)?linkedin\\.com/.+$')
-        && linkOk(d.github, '^https://(www\\.)?github\\.com/.+$');
+        && linkOk(d.github, '^https://(www\\.)?github\\.com/.+$')
+        && (!('website' in d) || linkOk(d.website, '^https://[A-Za-z0-9.-]+\\.[A-Za-z]{2,}(/[^\\s]*)?$'))
+        && photoOk(d);
     }
 
     match /members/{slug} {
       allow read: if true;
-      allow create: if isAdmin() && memberOk(request.resource.data);
+      allow create: if memberOk(request.resource.data) && (
+        isAdmin() || (signedIn() && mySlug() == slug)
+      );
       allow update: if memberOk(request.resource.data) && (
         isAdmin() || (signedIn() && mySlug() == slug)
       );

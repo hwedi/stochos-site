@@ -1,7 +1,7 @@
 /* Content for the site.
 
-   TEAM: once the team database is set up, the live site shows the team from the database
-         (names, roles, LinkedIn and GitHub links). Team members change their own links on
+   TEAM: the live site shows each person's profile from the database (name, role, photo,
+         introduction, about, skills and links). Each person writes their own on account.html. Team members change their own links on
          account.html, and the maintainer changes roles there. The team list below is the copy
          the site falls back to if the database cannot be reached, and the starting content for
          the database. Keep it in step with the database. "bio" is what a person says about
@@ -14,12 +14,12 @@ window.STOCHOS = {
 
   // alphabetical, because nobody is ahead of anybody else
   team: [
-    { name: "Ahmed Elsharif",  role: "Data preparation, remaining-life model, interface", bio: "", linkedin: "", github: "" },
+    { name: "Ahmed Elsharif",  role: "Data preparation, remaining-life model, interface", bio: "", linkedin: "https://www.linkedin.com/in/ahmed-elsharif-b1ab9127a/", github: "https://github.com/DonMesho" },
     { name: "Ekhlass Talha",   role: "Fault-diagnosis model, interface", bio: "",                  linkedin: "", github: "" },
     { name: "Faraj Ali",       role: "Data exploration, remaining-life model", bio: "",            linkedin: "", github: "" },
-    { name: "Mohamed Hwedi",   role: "Data preparation, remaining-life model and testing, interface", bio: "", linkedin: "", github: "" },
+    { name: "Mohamed Hwedi",   role: "Data preparation, remaining-life model and testing, interface", bio: "", linkedin: "https://www.linkedin.com/in/hwedi", github: "" },
     { name: "Muad Elsalieni",  role: "Data exploration, fault-diagnosis model", bio: "",           linkedin: "", github: "" },
-    { name: "Suliman Hashem",  role: "Data preparation, fault-diagnosis model", bio: "",           linkedin: "", github: "" }
+    { name: "Suliman Hashem",  role: "Data preparation, fault-diagnosis model", bio: "",           linkedin: "https://www.linkedin.com/in/suliman-hashem-421553308", github: "" }
   ],
 
   results: {

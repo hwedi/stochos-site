@@ -123,44 +123,180 @@
     bt2.textContent = "the point, and the range around it";
   }
 
-  /* ---------- team: one card per person, each with its own colour ---------- */
+  /* ---------- team ---------- */
+  var WHO = ["h2", "co", "c2h4", "c2h2", "c5", "c6"]; // one colour per person, tokens in css/site.css
+  function colourOf(idx) { return "var(--" + WHO[idx % WHO.length] + ")"; }
+  function slugify(name) {
+    return String(name || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  }
+  // only real web addresses become links, and only small JPEG photos stored in the profile are shown
+  function httpsOnly(u) { return typeof u === "string" && /^https:\/\/\S+$/i.test(u) ? u : ""; }
+  function photoOf(m) { return typeof m.photo === "string" && /^data:image\/jpeg;base64,[A-Za-z0-9+\/]+=*$/.test(m.photo) ? m.photo : ""; }
+  function profileUrl(m) { return "profile.html?u=" + encodeURIComponent(m.slug); }
+  function linksOf(m, keys) {
+    var names = { linkedin: "LinkedIn", github: "GitHub", website: "Website" };
+    return keys.map(function (k) { return [names[k], httpsOnly(m[k])]; }).filter(function (l) { return l[1]; });
+  }
+  function outLink(parent, label, href, who, cls) {
+    var a = htmlEl("a", cls || "", label, parent);
+    a.href = href;
+    a.target = "_blank";
+    a.rel = "noopener";
+    htmlEl("span", "sr-only", " (" + who + ", opens in a new tab)", a);
+    return a;
+  }
+  // a line unique to each name; the same shape at any size
+  function tracePoints(name, w, h) {
+    var r = rng(hash(name)), mid = h / 2, y = mid, pts = [], n = 48;
+    for (var i = 0; i < n; i++) {
+      y += (r() - 0.5) * h * 0.25;
+      y += (mid - y) * 0.12;
+      pts.push([2 + i * ((w - 4) / (n - 1)), Math.min(h - 4, Math.max(4, y))]);
+    }
+    return pts;
+  }
+  function drawTrace(parent, name) {
+    var s = svgEl("svg", { viewBox: "0 0 170 36", "aria-hidden": "true", focusable: "false", class: "trace-mini" }, parent);
+    svgEl("path", { d: pathFrom(tracePoints(name, 170, 36)) }, s);
+    return s;
+  }
+
+  /* team cards on the home page */
   var teamList = document.getElementById("team-list");
-  var WHO = ["h2", "co", "c2h4", "c2h2", "c5", "c6"]; // colour tokens in css/site.css
   function renderTeam(people) {
     if (!teamList) return;
     teamList.textContent = "";
     people.forEach(function (m, idx) {
       var li = htmlEl("li", "member", "", teamList);
-      li.style.setProperty("--who", "var(--" + WHO[idx % WHO.length] + ")");
-      htmlEl("h3", "", m.name, li);
-      var about = htmlEl("div", "about-me", "", li);
-      htmlEl("p", "role", m.role, about);
-      if (m.bio) htmlEl("p", "bio", m.bio, about);
-
-      // a small trace, unique to each name
-      var s = svgEl("svg", { viewBox: "0 0 170 36", "aria-hidden": "true", focusable: "false" }, li);
-      var r = rng(hash(m.name)), y = 18, pts = [];
-      for (var i = 0; i < 48; i++) {
-        y += (r() - 0.5) * 9;
-        y += (18 - y) * 0.12;
-        pts.push([2 + i * (166 / 47), Math.min(32, Math.max(4, y))]);
+      li.style.setProperty("--who", colourOf(idx));
+      var top = htmlEl("div", "member-top", "", li);
+      var pic = photoOf(m);
+      if (pic) {
+        var img = htmlEl("img", "member-photo", "", top);
+        img.src = pic; img.alt = ""; img.width = 64; img.height = 64; img.decoding = "async";
       }
-      svgEl("path", { d: pathFrom(pts) }, s);
-
+      var h = htmlEl("h3", "", "", top);
+      htmlEl("a", "", m.name, h).href = profileUrl(m);
+      var about = htmlEl("div", "about-me", "", li);
+      if (m.role) htmlEl("p", "role", m.role, about);
+      if (m.bio) htmlEl("p", "bio", m.bio, about);
+      drawTrace(li, m.name);
       var links = htmlEl("div", "links", "", li);
-      [["linkedin", "LinkedIn"], ["github", "GitHub"]].forEach(function (k) {
-        // only real web addresses become links
-        if (!m[k[0]] || !/^https:\/\//i.test(m[k[0]])) return;
-        var a = htmlEl("a", "", k[1], links);
-        a.href = m[k[0]];
-        a.target = "_blank";
-        a.rel = "noopener";
-        var hidden = htmlEl("span", "sr-only", " (" + m.name + ", opens in a new tab)", a);
-      });
+      var pl = htmlEl("a", "", "Profile", links);
+      pl.href = profileUrl(m);
+      htmlEl("span", "sr-only", " of " + m.name, pl);
+      linksOf(m, ["linkedin", "github"]).forEach(function (l) { outLink(links, l[0], l[1], m.name); });
     });
   }
-  if (D.team) renderTeam(D.team);
-  window.STOCHOS_renderTeam = renderTeam;
+
+  /* one person's own page: profile.html?u=their-name */
+  var profileRoot = document.getElementById("profile");
+  var wanted = "";
+  try { wanted = (new URLSearchParams(location.search).get("u") || "").toLowerCase(); } catch (e) { /* old browser */ }
+  var animatedOnce = false;
+  function bigTrace(parent, name) {
+    var S = 340, svg = svgEl("svg", { viewBox: "0 0 " + S + " " + S, "aria-hidden": "true", focusable: "false" }, parent);
+    for (var g = 0; g <= S; g += 20) {
+      var major = g % 100 === 0;
+      svgEl("line", { x1: g, y1: 0, x2: g, y2: S, stroke: major ? "var(--grid-major)" : "var(--grid)", "stroke-width": major ? 1 : 0.6 }, svg);
+      svgEl("line", { x1: 0, y1: g, x2: S, y2: g, stroke: major ? "var(--grid-major)" : "var(--grid)", "stroke-width": major ? 1 : 0.6 }, svg);
+    }
+    var pts = tracePoints(name, S, 72).map(function (p) { return [p[0], p[1] + (S - 72) / 2]; });
+    svgEl("path", { d: pathFrom(pts), class: "trace" + (reduceMotion || animatedOnce ? "" : " draw"), pathLength: 1, stroke: "var(--who)", "stroke-width": 3 }, svg);
+    animatedOnce = true;
+  }
+  function section(title) {
+    var sec = htmlEl("section", "section", "", profileRoot);
+    var wrap = htmlEl("div", "wrap", "", sec);
+    htmlEl("div", "section-head", "", wrap).appendChild(htmlEl("h2", "", title));
+    return wrap;
+  }
+  function renderProfile(people, state) {
+    if (!profileRoot) return;
+    var idx = -1;
+    people.forEach(function (m, i) { if (m.slug === wanted) idx = i; });
+    if (idx < 0 && state === "copy") return; // still waiting for the database
+    profileRoot.textContent = "";
+
+    if (idx < 0) {
+      var nf = htmlEl("section", "page-head", "", profileRoot);
+      var w0 = htmlEl("div", "wrap", "", nf);
+      htmlEl("h1", "", "Profile not found", w0);
+      htmlEl("p", "", "There is no team member at this address.", w0);
+      var act = htmlEl("div", "actions", "", w0);
+      var back = htmlEl("a", "btn btn-primary", "See the team", act);
+      back.href = "index.html#team";
+      document.title = "Profile not found | STOCHOS";
+      return;
+    }
+
+    var m = people[idx];
+    document.title = m.name + " | STOCHOS";
+    profileRoot.style.setProperty("--who", colourOf(idx));
+
+    var head = htmlEl("section", "profile-head", "", profileRoot);
+    var grid = htmlEl("div", "wrap profile-grid", "", head);
+    var picBox = htmlEl("div", "profile-pic", "", grid);
+    var pic = photoOf(m);
+    if (pic) {
+      var img = htmlEl("img", "", "", picBox);
+      img.src = pic; img.alt = "Photo of " + m.name; img.width = 320; img.height = 320;
+    } else {
+      bigTrace(picBox, m.name);
+    }
+    var info = htmlEl("div", "profile-info", "", grid);
+    var crumb = htmlEl("p", "crumb", "", info);
+    htmlEl("a", "", "The team", crumb).href = "index.html#team";
+    htmlEl("h1", "", m.name, info);
+    if (m.role) htmlEl("p", "lead", m.role, info);
+    if (m.bio) htmlEl("p", "profile-bio", m.bio, info);
+    var ls = linksOf(m, ["linkedin", "github", "website"]);
+    if (ls.length) {
+      var row = htmlEl("div", "actions profile-links", "", info);
+      ls.forEach(function (l, i) { outLink(row, l[0], l[1], m.name, i === 0 ? "btn btn-primary" : "btn btn-line"); });
+    }
+
+    if (m.about) {
+      var aw = section("About");
+      var txt = htmlEl("div", "about-text", "", aw);
+      m.about.split(/\n\s*\n/).forEach(function (para) { if (para.trim()) htmlEl("p", "", para.trim(), txt); });
+    }
+    var skills = String(m.skills || "").split(",").map(function (x) { return x.trim(); }).filter(Boolean).slice(0, 30);
+    if (skills.length) {
+      var sw = section("Skills");
+      var ul = htmlEl("ul", "tags skills", "", sw);
+      skills.forEach(function (t) { htmlEl("li", "", t, ul); });
+    }
+
+    if (people.length > 1) {
+      var ow = section("The rest of the team");
+      var others = htmlEl("ul", "others", "", ow);
+      people.forEach(function (o, i) {
+        if (i === idx) return;
+        var li = htmlEl("li", "", "", others);
+        li.style.setProperty("--who", colourOf(i));
+        var a = htmlEl("a", "other", "", li);
+        a.href = profileUrl(o);
+        drawTrace(a, o.name);
+        htmlEl("span", "other-name", o.name, a);
+        if (o.role) htmlEl("span", "other-role", o.role, a);
+      });
+    }
+  }
+
+  /* show the copy in data.js now, then the database version when it arrives */
+  var copy = (D.team || []).map(function (t) {
+    var o = {}; for (var k in t) o[k] = t[k];
+    o.slug = o.slug || slugify(o.name);
+    return o;
+  });
+  renderTeam(copy);
+  renderProfile(copy, "copy");
+  window.STOCHOS_onTeam = function (list, state) {
+    if (list && list.length) { renderTeam(list); renderProfile(list, "live"); }
+    else renderProfile(copy, "failed");
+  };
 
   /* ---------- results table ---------- */
   var record = document.getElementById("record");

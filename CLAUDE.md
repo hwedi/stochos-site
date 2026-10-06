@@ -32,10 +32,10 @@ Always start with `git fetch origin` and work from the latest origin/main. Ignor
 ## Facts about the site
 
 - js/data.js holds the content that changes: projects, the results numbers, and the team copy (see "Team sign-in" below for how the team works now).
-- Other files: index.html, projects.html, 404.html, account.html, css/site.css (colour variables are at the top), js/site.js, fonts/, img/.
+- Other files: index.html, projects.html, profile.html, 404.html, account.html, css/site.css (colour variables are at the top), js/site.js, fonts/, img/.
 - img/og.png (the picture shown when the site is shared) needs a browser to regenerate. Ask the owner when it needs a new one.
 - CNAME must stay exactly: stochos.dev
-- Update sitemap.xml when a page is added. Exception: account.html is private (noindex), so it stays out of the sitemap.
+- Update sitemap.xml when a page is added. Exception: account.html is private (noindex), so it stays out of the sitemap. Each person's profile (profile.html?u=their-slug) is listed in the sitemap; add a line when someone joins and remove it when someone leaves.
 
 ## Rules for content
 
@@ -65,7 +65,7 @@ The team signs in with Google on account.html and edits their own profile. This 
 
 - Firebase project: stochos-d0da4. The public settings are in js/firebase-config.js. They are meant to be public.
 - The database has three collections:
-  - `members/{slug}`: public profile (name, role, bio, linkedin, github). The bio is optional and 300 letters at most. The live site reads it. Each person can change everything on their own profile, with no approval. The owner can edit any profile.
+  - `members/{slug}`: one person's own profile: name, role, bio (short introduction, 300), about (longer text, 3000), skills (comma-separated, 300), linkedin, github, website, photo. The live site reads it. Each person creates and edits their own with no approval; the owner can edit any. The photo is a 320 pixel square JPEG stored inside the profile as text (no outside image hosting).
   - `allowed/{email}`: which Google email belongs to which profile. Private. Only the owner writes it, on account.html under "Team list".
   - `meta/admin`: holds no data. It lets the page ask "am I the owner?".
 - Rules are in tools/firestore.rules. They have a placeholder for the owner's email. The real rules are published in the Firebase console (Firestore Database, Rules, Publish). If the rules change, give the owner the full text with their email filled in and the exact clicks. You cannot publish them yourself.
@@ -74,6 +74,12 @@ The team signs in with Google on account.html and edits their own profile. This 
 - Only the people on the team list can sign in and write. The owner alone adds or removes people (account.html, Team list). The rules also check that names, roles and links are the right kind of text and size. These checks protect the site, so keep them.
 - Links: a link must be a full https address on linkedin.com or github.com. The page and the rules both enforce this. Never write another kind of link into a profile.
 - js/account.js is built from js/account.src.js. Never edit js/account.js by hand. Rebuild with: `cd tools && npm install && npm run build`. Commit both files. node_modules is not committed.
+
+Profile pages:
+
+- Each person has their own page: profile.html?u=their-slug (for example profile.html?u=ahmed-elsharif). It shows their photo (or their coloured line), name, role, introduction, links, About, skills, and the rest of the team. The team cards on the home page link to it.
+- A person the owner adds who is not in js/data.js has no profile until they sign in and create it themselves. People in data.js get a starting profile when the owner saves the team list.
+- The hero says "six data science students". If the team size changes, ask the owner before changing that line.
 
 Exceptions to "load nothing from other websites":
 

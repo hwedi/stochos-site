@@ -149,6 +149,8 @@ p { margin: 0 0 1em; max-width: 62ch; }
 .btn-primary { background: var(--btn-bg); color: var(--btn-fg); }
 .btn-primary:hover { filter: brightness(1.15); }
 .btn-quiet { color: var(--link); padding-inline: 0.25rem; text-decoration: underline; }
+.btn-line { color: var(--ink); border-color: var(--ink); background: none; }
+.btn-line:hover { background: var(--paper-2); }
 
 /* hero */
 .hero { padding: 3.5rem 0 4.5rem; }
@@ -198,7 +200,11 @@ p { margin: 0 0 1em; max-width: 62ch; }
   padding: 1.4rem 1.4rem 1.25rem; background: var(--paper-2);
   border: 1px solid var(--line); border-top: 4px solid var(--who); border-radius: 4px;
 }
-.member h3 { font-size: 1.85rem; }
+.member-top { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+.member-photo { width: 64px; height: 64px; flex: none; object-fit: cover; border-radius: 4px; border: 1px solid var(--line); }
+.member h3 { font-size: 1.85rem; min-width: 0; }
+.member h3 a { color: var(--ink); text-decoration: none; }
+.member h3 a:hover { text-decoration: underline; text-decoration-thickness: 2px; }
 .member .about-me { min-width: 0; }
 .member .role { color: var(--ink-2); margin: 0; }
 .member .bio { color: var(--ink); margin: 0.7rem 0 0; }
@@ -228,14 +234,58 @@ p { margin: 0 0 1em; max-width: 62ch; }
 .project .detail p { color: var(--ink-2); margin: 0; }
 .more { padding: 3rem 0 4rem; border-top: 1px solid var(--line); color: var(--ink-3); }
 
+
+/* a person's own page */
+.profile-head { padding: 3.5rem 0 4rem; }
+.profile-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 3.5rem; align-items: center; }
+.profile-pic {
+  aspect-ratio: 1 / 1; max-width: 420px; overflow: hidden; background: var(--paper-2);
+  border: 1px solid var(--line); border-top: 4px solid var(--who, var(--link)); border-radius: 4px;
+}
+.profile-pic img, .profile-pic svg { display: block; width: 100%; height: 100%; object-fit: cover; }
+.crumb { margin: 0 0 1rem; font-weight: 600; }
+.crumb a { color: var(--ink-2); }
+.profile-info .lead { margin-top: 1.25rem; font-size: 1.3rem; line-height: 1.5; color: var(--ink-2); }
+.profile-bio { font-size: 1.125rem; max-width: 56ch; }
+.profile-links { margin-top: 1.75rem; }
+.about-text p { font-size: 1.125rem; color: var(--ink-2); white-space: pre-line; max-width: 66ch; }
+.skills { margin-top: 0; }
+.skills li { font-size: 1rem; padding: 0.3rem 0.75rem; color: var(--ink); }
+.others { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.other {
+  display: flex; flex-direction: column; gap: 0.4rem; height: 100%; padding: 1rem 1.1rem 1.1rem;
+  color: var(--ink); text-decoration: none; background: var(--paper-2);
+  border: 1px solid var(--line); border-top: 4px solid var(--who); border-radius: 4px;
+}
+.other:hover .other-name { text-decoration: underline; }
+.other svg { width: 100%; max-width: 170px; height: auto; display: block; margin-bottom: 0.3rem; }
+.other svg path { fill: none; stroke: var(--who); stroke-width: 1.9; stroke-linejoin: round; stroke-linecap: round; }
+.other-name { font: 700 1.4rem/1.1 var(--font-display); font-stretch: 78%; }
+.other-role { color: var(--ink-2); font-size: 0.9375rem; }
+
+/* photo picker on the sign-in page */
+.photo-row { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.25rem; }
+.photo-preview {
+  width: 96px; height: 96px; flex: none; display: grid; place-items: center; overflow: hidden;
+  background: var(--paper-2); border: 1px solid var(--line); border-radius: 4px; color: var(--ink-3); font-size: 0.875rem;
+}
+.photo-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-controls { display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+.photo-controls input[type="file"] { font: inherit; color: var(--ink-2); max-width: 100%; }
+
 @media (max-width: 960px) {
   .hero .wrap, .feature, .project { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
   .principles { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
   .team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .profile-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  .profile-pic { max-width: 300px; }
+  .others { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .site-nav { gap: 1.1rem; }
 }
 @media (max-width: 640px) {
   .team { grid-template-columns: minmax(0, 1fr); }
+  .others { grid-template-columns: minmax(0, 1fr); }
+  .profile-pic { max-width: 220px; }
   /* the drawing shrinks on phones, so its text is set larger to stay readable */
   .chart-label { font-size: 22px; }
   .chart-note { font-size: 19px; }
@@ -290,3 +340,6 @@ button.btn:disabled { opacity: 0.55; cursor: default; }
 .site-footer p a + a { margin-left: 1.25rem; }
 button.btn-quiet { background: none; }
 .roles { margin-top: 1rem; }
+#profile .section { padding: 3rem 0; }
+#profile .section-head { margin-bottom: 1.25rem; }
+#profile .section-head h2 { font-size: clamp(1.8rem, 3.4vw, 2.4rem); }

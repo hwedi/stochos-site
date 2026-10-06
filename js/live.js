@@ -1,10 +1,12 @@
-/* Public pages: read the team from the database and show it instead of the copy in data.js.
-   If anything fails, the page keeps showing data.js. This sends one read-only request to Google. */
+/* Public pages: read the team's profiles from the database.
+   If anything fails, the pages keep showing the copy in data.js. This sends one read-only request to Google. */
 (function () {
   "use strict";
   var c = window.STOCHOS_FIREBASE;
-  if (!c || !window.STOCHOS_renderTeam || !window.fetch) return;
+  function done(list, state) { if (window.STOCHOS_onTeam) window.STOCHOS_onTeam(list, state); }
+  if (!c || !window.fetch) { done(null, "failed"); return; }
 
+  var FIELDS = ["name", "role", "bio", "about", "skills", "linkedin", "github", "website", "photo"];
   function text(f) { return f && typeof f.stringValue === "string" ? f.stringValue : ""; }
 
   var url = "https://firestore.googleapis.com/v1/projects/" + encodeURIComponent(c.projectId) +
@@ -14,12 +16,12 @@
     .then(function (r) { if (!r.ok) throw new Error("read failed"); return r.json(); })
     .then(function (j) {
       var list = (j.documents || []).map(function (d) {
-        var f = d.fields || {};
-        return { name: text(f.name), role: text(f.role), bio: text(f.bio), linkedin: text(f.linkedin), github: text(f.github) };
-      }).filter(function (m) { return m.name && m.role; });
-      if (!list.length) return;
+        var f = d.fields || {}, m = { slug: String(d.name || "").split("/").pop() };
+        FIELDS.forEach(function (k) { m[k] = text(f[k]); });
+        return m;
+      }).filter(function (m) { return m.name && m.slug; });
       list.sort(function (a, b) { return a.name.localeCompare(b.name); });
-      window.STOCHOS_renderTeam(list);
+      done(list, "live");
     })
-    .catch(function () { /* keep the copy from data.js */ });
+    .catch(function () { done(null, "failed"); });
 })();

@@ -83,6 +83,12 @@ Profile pages:
 - A person the owner adds who is not in js/data.js has no profile until they sign in and create it themselves. People in data.js get a starting profile when the owner saves the team list.
 - The hero says "Six data scientists". If the team size changes, ask the owner before changing that line.
 
+Logos and motion:
+
+- Tool logos live in js/logos.js and are drawn inline (nothing loads from other websites). Brand logos come from Simple Icons (CC0); the marks belong to their owners and only name the tools we use. Matplotlib and Azure use plain generic icons (a chart, a cloud) because no permitted logo exists. Never add a Samsung logo, and never draw a lookalike of a company's logo.
+- Any tag whose name matches a logo (stack, project tags, people's skills) shows the logo in its brand colour; very dark brand colours stay plain in dark theme.
+- Animations (js/site.js, "coming alive"): sections and cards rise in as they scroll into view, the team pictures pop in, the pipeline colour bars grow, card lines draw themselves, the estimate in the graph pulses, results count up, cards lift on hover. All of it switches off when the visitor's device asks for reduced motion; then everything shows at once. Keep it that way.
+
 Exceptions to "load nothing from other websites":
 
 - Every public page that shows the team (index.html) sends one read-only request to firestore.googleapis.com to get the team list. It loads no script from Google.

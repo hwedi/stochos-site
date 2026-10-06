@@ -328,6 +328,27 @@
     else renderProfile(copy, "failed");
   };
 
+  /* ---------- how we work: pipeline and stack ---------- */
+  var pipe = document.getElementById("pipeline");
+  if (pipe && D.pipeline) {
+    D.pipeline.forEach(function (step, i) {
+      var li = htmlEl("li", "step", "", pipe);
+      li.style.setProperty("--who", colourOf(i));
+      htmlEl("span", "step-no", (i < 9 ? "0" : "") + (i + 1), li).setAttribute("aria-hidden", "true");
+      htmlEl("h3", "", step.title, li);
+      htmlEl("p", "", step.text, li);
+    });
+  }
+  var stackBox = document.getElementById("stack-groups");
+  if (stackBox && D.stack) {
+    D.stack.forEach(function (g) {
+      var col = htmlEl("div", "stack-group", "", stackBox);
+      htmlEl("h4", "", g.group, col);
+      var ul = htmlEl("ul", "tags", "", col);
+      (g.items || []).forEach(function (t) { htmlEl("li", "", t, ul); });
+    });
+  }
+
   /* ---------- our work, on the home page ---------- */
   var workList = document.getElementById("work-list");
   if (workList && D.projects) {

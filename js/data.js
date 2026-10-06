@@ -22,6 +22,30 @@ window.STOCHOS = {
     { name: "Suliman Hashem",  role: "Data preparation, fault-diagnosis model", bio: "",           linkedin: "https://www.linkedin.com/in/suliman-hashem-421553308", github: "" }
   ],
 
+  // HOW WE WORK: the steps every project goes through, and the tools we use.
+  // Only list tools the team really uses.
+  pipeline: [
+    { title: "Explore",
+      text: "We profile the data before modelling: distributions, gaps, outliers and how the signals relate to each other." },
+    { title: "Prepare",
+      text: "One shared preprocessing pipeline feeds every model. Data is split by whole unit, never by row, and scaling is fitted on training data only, so nothing leaks into evaluation." },
+    { title: "Baseline",
+      text: "A simple reference model comes first, so every later model has a clear number to beat." },
+    { title: "Model",
+      text: "We train and compare candidates against the baseline, including sequence models such as GRU and LSTM networks, and tune them on a separate validation set." },
+    { title: "Evaluate",
+      text: "A test set is held back until the end and scored once, with the measures that matter for the task: accuracy and recall for classification, MAE and RMSE for regression." },
+    { title: "Deploy",
+      text: "Models ship together with their preprocessing as a web application and API. Every prediction carries a confidence score or a range, and uncertain results are flagged for human review." }
+  ],
+
+  stack: [
+    { group: "Data and analysis", items: ["Python", "pandas", "NumPy", "Matplotlib"] },
+    { group: "Machine learning",  items: ["PyTorch", "TensorFlow"] },
+    { group: "Delivery",          items: ["FastAPI", "Gradio", "Azure"] },
+    { group: "Workflow",          items: ["Google Colab", "Git", "GitHub"] }
+  ],
+
   results: {
     caption: "Results on 900 transformers the models had never seen",
     rows: [

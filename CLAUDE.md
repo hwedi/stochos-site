@@ -51,7 +51,7 @@ Always start with `git fetch origin` and work from the latest origin/main. Ignor
 - The footer must keep "not an official Samsung website".
 - No Samsung logos.
 - No emojis.
-- Write plainly and specifically.
+- Write plainly and specifically, in a professional voice. Present the team as capable practitioners, not beginners. Never use classroom or hobby wording such as "we split the work", "we check each other's work", "we work as equals" or "we learn".
 - Load nothing from other websites. The only exceptions are the ones listed under "Team sign-in".
 - Keep both themes, the phone layout, keyboard focus and good contrast.
 

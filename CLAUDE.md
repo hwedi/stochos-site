@@ -33,14 +33,14 @@ Always start with `git fetch origin` and work from the latest origin/main. Ignor
 
 - js/data.js holds the content that changes: projects, the results numbers, and the team copy (see "Team sign-in" below for how the team works now).
 - Other files: index.html, projects.html, profile.html, 404.html, account.html, css/site.css (colour variables are at the top), js/site.js, fonts/, img/.
-- img/og.png (the picture shown when the site is shared) needs a browser to regenerate. Ask the owner when it needs a new one.
+- img/og.png (the picture shown when the site is shared) is made from tools/og.html: open it in a browser at 1200 x 630 with reduced motion, and take a screenshot. Remake it whenever the headline changes, and ask the owner before changing its words.
 - CNAME must stay exactly: stochos.dev
 - Update sitemap.xml when a page is added. Exception: account.html is private (noindex), so it stays out of the sitemap. Each person's profile (profile.html?u=their-slug) is listed in the sitemap; add a line when someone joins and remove it when someone leaves.
 
 ## Rules for content
 
 - The team is six equals, listed alphabetically, with no leader.
-- The site is about the team, not the project and not Samsung. The landing page is: the opening ("Six data science students. One team.", the six as small pictures that link to their profiles, and the coloured graph beside it; the owner likes that graph, so keep it), the team as six cards (photo or coloured line, name, role, introduction, links), and "Our work" as one card per project from data.js. All other project detail (results, how we work) lives on projects.html. Keep it that way.
+- The site is about the team, not the project and not Samsung. The landing page is: the opening ("Six data scientists. One team.", the six as small pictures that link to their profiles, and the coloured graph beside it; the owner likes that graph, so keep it), the team as six cards (photo or coloured line, name, role, introduction, links), and "Our work" as one card per project from data.js. All other project detail (results, how we work) lives on projects.html. Keep it that way.
 - Samsung appears in one place only: the footer line "not an official Samsung website". Do not mention Samsung, the programme or where the team met anywhere else unless the owner asks.
 - Never put text on the public pages that explains how the site itself works (for example "each person writes their own profile", "listed alphabetically", "sign in to edit"). Pages present the team and the work. The only sign-in link is in the footer. Section headings stand alone unless the owner gives the words.
 - Do not say on the pages that the team is listed alphabetically, or explain who is above whom. Keep the order alphabetical, and say nothing about it.
@@ -51,6 +51,7 @@ Always start with `git fetch origin` and work from the latest origin/main. Ignor
 - The footer must keep "not an official Samsung website".
 - No Samsung logos.
 - No emojis.
+- Present STOCHOS as an established data science and machine learning team. Never call the team students, and never mention a course, programme, class, capstone or cohort.
 - Write plainly and specifically, in a professional voice. Present the team as capable practitioners, not beginners. Never use classroom or hobby wording such as "we split the work", "we check each other's work", "we work as equals" or "we learn".
 - Load nothing from other websites. The only exceptions are the ones listed under "Team sign-in".
 - Keep both themes, the phone layout, keyboard focus and good contrast.
@@ -79,7 +80,7 @@ Profile pages:
 
 - Each person has their own page: profile.html?u=their-slug (for example profile.html?u=ahmed-elsharif). It shows their photo (or their coloured line), name, role, introduction, links, About, skills, and the rest of the team. The team cards on the home page link to it.
 - A person the owner adds who is not in js/data.js has no profile until they sign in and create it themselves. People in data.js get a starting profile when the owner saves the team list.
-- The hero says "six data science students". If the team size changes, ask the owner before changing that line.
+- The hero says "Six data scientists". If the team size changes, ask the owner before changing that line.
 
 Exceptions to "load nothing from other websites":
 

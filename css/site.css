@@ -196,23 +196,52 @@ p { margin: 0 0 1em; max-width: 62ch; }
 .team { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
 .member {
   --who: var(--link);
-  display: flex; flex-direction: column; gap: 0.75rem; min-width: 0;
-  padding: 1.4rem 1.4rem 1.25rem; background: var(--paper-2);
+  display: flex; flex-direction: column; gap: 1rem; min-width: 0;
+  padding: 1.4rem 1.4rem 1.2rem; background: var(--paper-2);
   border: 1px solid var(--line); border-top: 4px solid var(--who); border-radius: 4px;
+  transition: border-color 0.15s;
 }
-.member-top { display: flex; align-items: center; gap: 1rem; min-width: 0; }
-.member-photo { width: 64px; height: 64px; flex: none; object-fit: cover; border-radius: 4px; border: 1px solid var(--line); }
-.member h3 { font-size: 1.85rem; min-width: 0; }
+.member:hover { border-color: var(--who); }
+.member-top { display: flex; align-items: flex-start; gap: 1rem; min-width: 0; }
+.member-who { min-width: 0; }
+.member h3 { font-size: 1.7rem; }
 .member h3 a { color: var(--ink); text-decoration: none; }
 .member h3 a:hover { text-decoration: underline; text-decoration-thickness: 2px; }
-.member .about-me { min-width: 0; }
-.member .role { color: var(--ink-2); margin: 0; }
-.member .bio { color: var(--ink); margin: 0.7rem 0 0; }
-.member svg { width: 100%; max-width: 240px; height: auto; display: block; margin-top: auto; }
-.member svg path { fill: none; stroke: var(--who); stroke-width: 1.9; stroke-linejoin: round; stroke-linecap: round; }
-.member .links { display: flex; gap: 1rem; }
-.member .links:empty { display: none; }
-.team-note { margin: 1.75rem 0 0; color: var(--ink-3); font-size: 0.9375rem; }
+.member .role { color: var(--ink-2); margin: 0.35rem 0 0; font-size: 0.975rem; line-height: 1.5; }
+.member .bio { color: var(--ink); margin: 0; }
+.member .links { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; margin-top: auto; padding-top: 0.9rem; border-top: 1px solid var(--line); }
+.member .profile-link { font-weight: 600; }
+
+/* a person's mark: their photo, or their coloured line on chart paper */
+.avatar {
+  --who: var(--link);
+  display: block; flex: none; width: 64px; height: 64px; overflow: hidden;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 4px;
+}
+.avatar img, .avatar svg { display: block; width: 100%; height: 100%; object-fit: cover; }
+.avatar .grid { stroke: var(--grid); stroke-width: 1; }
+.avatar path { fill: none; stroke: var(--who); stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; }
+.avatar-sm { width: 44px; height: 44px; }
+
+/* the team at the top of the home page */
+.hero .wrap { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); }
+.hero h1 { font-size: clamp(2.7rem, 5.6vw, 4.6rem); }
+.eyebrow { margin: 0 0 1.1rem; font: 600 0.8125rem/1 var(--font-body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); }
+.hero-team { list-style: none; padding: 0; margin: 2.5rem 0 0; display: flex; flex-wrap: wrap; gap: 0.9rem 1.1rem; }
+.hero-team a { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; color: var(--ink-2); text-decoration: none; font-size: 0.875rem; font-weight: 500; }
+.hero-team a:hover { color: var(--ink); }
+.hero-team a:hover .avatar { border-color: var(--who); }
+
+/* our work on the home page */
+.work-card {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1.5rem 3rem; align-items: end;
+  padding: 2rem; background: var(--paper-2); border: 1px solid var(--line); border-radius: 4px;
+}
+.work-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 1rem; }
+.work-card h3 { font-size: clamp(1.8rem, 3vw, 2.4rem); }
+.work-card .status { font-weight: 600; color: var(--c2h4); }
+.work-card .summary { margin: 0.9rem 0 0; color: var(--ink-2); font-size: 1.125rem; }
+.work-actions { margin-top: 0; flex-wrap: nowrap; }
 
 .about p { color: var(--ink-2); font-size: 1.125rem; }
 
@@ -277,6 +306,8 @@ p { margin: 0 0 1em; max-width: 62ch; }
   .hero .wrap, .feature, .project { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
   .principles { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
   .team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .work-card { grid-template-columns: minmax(0, 1fr); align-items: start; }
+  .work-actions { flex-wrap: wrap; }
   .profile-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
   .profile-pic { max-width: 300px; }
   .others { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -291,6 +322,9 @@ p { margin: 0 0 1em; max-width: 62ch; }
   .chart-note { font-size: 19px; }
 }
 @media (max-width: 520px) {
+  .hero-team { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.5rem; }
+  .hero-team a { font-size: 0.75rem; }
+  .hero-team .avatar-sm { width: 40px; height: 40px; }
   .brand span { font-size: 1.15rem; }
   .site-nav { gap: 0.9rem; font-size: 0.95rem; }
   .bar { gap: 0.9rem; }

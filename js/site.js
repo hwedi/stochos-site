@@ -162,28 +162,58 @@
     return s;
   }
 
+  function avatar(parent, m, idx, cls) {
+    var box = htmlEl("span", "avatar" + (cls ? " " + cls : ""), "", parent);
+    box.style.setProperty("--who", colourOf(idx));
+    var pic = photoOf(m);
+    if (pic) {
+      var img = htmlEl("img", "", "", box);
+      img.src = pic; img.alt = ""; img.decoding = "async";
+    } else {
+      var s = svgEl("svg", { viewBox: "0 0 64 64", "aria-hidden": "true", focusable: "false" }, box);
+      for (var g = 16; g < 64; g += 16) {
+        svgEl("line", { x1: g, y1: 0, x2: g, y2: 64, class: "grid" }, s);
+        svgEl("line", { x1: 0, y1: g, x2: 64, y2: g, class: "grid" }, s);
+      }
+      var pts = tracePoints(m.name, 64, 28).map(function (p) { return [p[0], p[1] + 18]; });
+      svgEl("path", { d: pathFrom(pts) }, s);
+    }
+    return box;
+  }
+
+  /* the team, small, at the top of the home page */
+  var heroTeam = document.getElementById("hero-team");
+  function renderHeroTeam(people) {
+    if (!heroTeam) return;
+    heroTeam.textContent = "";
+    people.forEach(function (m, idx) {
+      var li = htmlEl("li", "", "", heroTeam);
+      var a = htmlEl("a", "", "", li);
+      a.href = profileUrl(m);
+      avatar(a, m, idx, "avatar-sm");
+      htmlEl("span", "", String(m.name).split(" ")[0], a);
+      a.setAttribute("aria-label", m.name);
+    });
+  }
+
   /* team cards on the home page */
   var teamList = document.getElementById("team-list");
   function renderTeam(people) {
+    renderHeroTeam(people);
     if (!teamList) return;
     teamList.textContent = "";
     people.forEach(function (m, idx) {
       var li = htmlEl("li", "member", "", teamList);
       li.style.setProperty("--who", colourOf(idx));
       var top = htmlEl("div", "member-top", "", li);
-      var pic = photoOf(m);
-      if (pic) {
-        var img = htmlEl("img", "member-photo", "", top);
-        img.src = pic; img.alt = ""; img.width = 64; img.height = 64; img.decoding = "async";
-      }
-      var h = htmlEl("h3", "", "", top);
+      avatar(top, m, idx);
+      var who = htmlEl("div", "member-who", "", top);
+      var h = htmlEl("h3", "", "", who);
       htmlEl("a", "", m.name, h).href = profileUrl(m);
-      var about = htmlEl("div", "about-me", "", li);
-      if (m.role) htmlEl("p", "role", m.role, about);
-      if (m.bio) htmlEl("p", "bio", m.bio, about);
-      drawTrace(li, m.name);
+      if (m.role) htmlEl("p", "role", m.role, who);
+      if (m.bio) htmlEl("p", "bio", m.bio, li);
       var links = htmlEl("div", "links", "", li);
-      var pl = htmlEl("a", "", "Profile", links);
+      var pl = htmlEl("a", "profile-link", "View profile", links);
       pl.href = profileUrl(m);
       htmlEl("span", "sr-only", " of " + m.name, pl);
       linksOf(m, ["linkedin", "github"]).forEach(function (l) { outLink(links, l[0], l[1], m.name); });
@@ -297,6 +327,28 @@
     if (list && list.length) { renderTeam(list); renderProfile(list, "live"); }
     else renderProfile(copy, "failed");
   };
+
+  /* ---------- our work, on the home page ---------- */
+  var workList = document.getElementById("work-list");
+  if (workList && D.projects) {
+    D.projects.forEach(function (p) {
+      var card = htmlEl("article", "work-card", "", workList);
+      var left = htmlEl("div", "", "", card);
+      var head = htmlEl("div", "work-head", "", left);
+      htmlEl("h3", "", p.title, head);
+      if (p.status) htmlEl("span", "status", p.status, head);
+      htmlEl("p", "summary", p.summary, left);
+      var tags = htmlEl("ul", "tags", "", left);
+      (p.tags || []).forEach(function (t) { htmlEl("li", "", t, tags); });
+      var act = htmlEl("div", "actions work-actions", "", card);
+      if (httpsOnly(p.url)) {
+        var demo = htmlEl("a", "btn btn-primary", "Open the live demo", act);
+        demo.href = p.url; demo.target = "_blank"; demo.rel = "noopener";
+        htmlEl("span", "sr-only", " (opens in a new tab)", demo);
+      }
+      htmlEl("a", "btn btn-line", "How it works", act).href = "projects.html";
+    });
+  }
 
   /* ---------- results table ---------- */
   var record = document.getElementById("record");

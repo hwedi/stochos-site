@@ -48,13 +48,15 @@
   <main id="main">
     <section class="hero">
       <div class="wrap">
-        <div>
-          <h1>We are STOCHOS: six data science students.</h1>
-          <p class="lead">We work as equals. We split the work by stage and check each other's work.</p>
+        <div class="hero-text">
+          <p class="eyebrow">Data science team</p>
+          <h1>Six data science students.<br> One team.</h1>
+          <p class="lead">We build machine learning models together. We split the work by stage, check each other's work, and make our models say how sure they are.</p>
           <div class="actions">
             <a class="btn btn-primary" href="#team">Meet the team</a>
-            <a class="btn btn-quiet" href="projects.html">See what we have built</a>
+            <a class="btn btn-quiet" href="#work">See our work</a>
           </div>
+          <ul class="hero-team" id="hero-team" aria-label="The team"></ul>
         </div>
         <figure class="hero-figure">
           <div id="gas-chart"></div>
@@ -76,13 +78,9 @@
     <section class="section" id="work" aria-labelledby="work-h">
       <div class="wrap">
         <div class="section-head">
-          <h2 id="work-h">What we have built</h2>
-          <p>Our first project reads the gases in a power transformer's oil and reports what is wrong with it and how long it has left.</p>
+          <h2 id="work-h">Our work</h2>
         </div>
-        <div class="actions">
-          <a class="btn btn-primary" data-demo-link href="https://transformer.stochos.dev" target="_blank" rel="noopener">Open the live demo<span class="sr-only"> (opens in a new tab)</span></a>
-          <a class="btn btn-quiet" href="projects.html">Read how it works</a>
-        </div>
+        <div id="work-list"></div>
       </div>
     </section>
   </main>
